@@ -10,10 +10,21 @@
 
 # Installation
 
+### gradle
 ```groovy
 dependencies {
-    implementation ‘academy.appdev:floating-context-menu:${LatestVersion}’
+    implementation ‘academy.appdev:floating-context-menu:1.0.0’
 }
+```
+
+### maven
+``` xml
+<dependency>
+	<groupId>academy.appdev</groupId>
+	<artifactId>floating-context-menu</artifactId>
+	<version>1.0.0</version>
+	<type>pom</type>
+</dependency>
 ```
 
 # Setup
