@@ -13,7 +13,7 @@
 ### gradle
 ```groovy
 dependencies {
-    implementation 'academy.appdev:floating-context-menu:1.0.2'
+    implementation 'academy.appdev:floating-context-menu:1.0.3'
 }
 ```
 
@@ -22,7 +22,7 @@ dependencies {
 <dependency>
 	<groupId>academy.appdev</groupId>
 	<artifactId>floating-context-menu</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<type>pom</type>
 </dependency>
 ```

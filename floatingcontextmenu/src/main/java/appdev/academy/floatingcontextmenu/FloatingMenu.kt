@@ -284,8 +284,8 @@ class FloatingMenu : FrameLayout {
     }
 
     class MenuItem(
-        val icon: Int,
-        val title: String
+        var icon: Int,
+        var title: String
     )
 
 }
