@@ -42,7 +42,7 @@ class FloatingMenu(context: Context) : FrameLayout(context) {
     var defaultBackgroundTint: Int = android.R.color.white
     var selectedBackgroundTint: Int = android.R.color.black
 
-    var frameBgColor = android.R.color.transparent
+    var frameBgColor = R.color.shadow
     var textColor = android.R.color.white
 
 

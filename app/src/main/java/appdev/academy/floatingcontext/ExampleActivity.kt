@@ -37,8 +37,7 @@ class ExampleActivity : AppCompatActivity() {
 
                 menu = floatingMenu(ArrayList<FloatingMenu.MenuItem>().apply {
                     (0..2).forEach { add(FloatingMenu.MenuItem(R.drawable.search_icon, "Option$it")) }
-                }
-                ) {}.lparams {
+                }) {}.lparams {
                     width = matchParent
                     height = matchParent
                 }
