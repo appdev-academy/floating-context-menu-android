@@ -3,6 +3,7 @@ package appdev.academy.floatingcontextmenu
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
+import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.view.Gravity
@@ -226,7 +227,9 @@ class FloatingMenu(context: Context) : FrameLayout(context) {
                 }
                 startAnimation(scale)
                 setShape(if (b) selectedBackgroundTint else defaultBackgroundTint, dip(menuItemSize))
-                elevation = if (b) dip(10).toFloat() else dip(1).toFloat()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    elevation = if (b) dip(10).toFloat() else dip(1).toFloat()
+                }
             }
 
             icon.setColorFilter(

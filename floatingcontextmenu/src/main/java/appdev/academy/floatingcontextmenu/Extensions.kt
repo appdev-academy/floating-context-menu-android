@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewManager
+import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.windowManager
@@ -37,7 +38,7 @@ fun View.setShape(
     backgroundColor: Int,
     radius: Int = dip(20)
 ) {
-    background = context.createShape(backgroundColor, radius)
+    backgroundDrawable = context.createShape(backgroundColor, radius)
 }
 
 
