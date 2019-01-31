@@ -6,6 +6,7 @@ import android.graphics.PorterDuff
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutSlowInInterpolator
+import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.animation.Animation
@@ -15,6 +16,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.*
+import java.time.format.DecimalStyle
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -24,7 +26,10 @@ import kotlin.math.sin
  * Created by stas on 1/29/19.
  */
 
-class FloatingMenu(context: Context) : FrameLayout(context) {
+class FloatingMenu : FrameLayout {
+    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     // customization
     var menuItemSize = 70
