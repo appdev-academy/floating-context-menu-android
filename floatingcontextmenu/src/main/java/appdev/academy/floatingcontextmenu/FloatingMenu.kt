@@ -55,13 +55,12 @@ class FloatingMenu : FrameLayout {
     var menuItems: List<MenuItem>? = null
         set(value) {
             field = value
-            items = menuItems?.map {
-                ItemComponent(it.icon).apply {
-                    addView(createView(AnkoContext.create(context, this@FloatingMenu)))
-                }
-            } ?: emptyList()
-
+            createMenuItemViews()
         }
+
+    fun notifyMenuItemsChanged() {
+        createMenuItemViews()
+    }
 
     // internal
     companion object {
@@ -77,6 +76,8 @@ class FloatingMenu : FrameLayout {
             }
             return false
         }
+
+        private val MENU_ITEM_TAG = "menu.item"
     }
 
     private var aX: Int = 0
@@ -87,7 +88,7 @@ class FloatingMenu : FrameLayout {
     var onItemSelected: ((itemIndex: Int) -> Unit)? = null
 
 
-    private lateinit var items: List<ItemComponent>
+    private var items: List<ItemComponent>? = null
 
 
     private var title: TextView
@@ -103,9 +104,23 @@ class FloatingMenu : FrameLayout {
 
     }
 
+    private fun createMenuItemViews() {
+
+        applyRecursively {
+            if (it.tag == MENU_ITEM_TAG) {
+                removeView(it)
+            }
+        }
+
+        items = menuItems?.map {
+            ItemComponent(it.icon).apply {
+                addView(createView(AnkoContext.create(context, this@FloatingMenu)))
+            }
+        } ?: emptyList()
+    }
 
     private fun checkSelectedItem(x: Int, y: Int) =
-        items.indexOfFirst { it.isSelected(x, y) }
+        items?.indexOfFirst { it.isSelected(x, y) }
 
     private val MotionEvent.xCoord: Int
         get() {
@@ -125,20 +140,20 @@ class FloatingMenu : FrameLayout {
             if (event.action == MotionEvent.ACTION_UP) {
                 isVisible = false
                 if (selectedItemIndex != -1) onItemSelected?.invoke(selectedItemIndex)
-                items.forEach { it.collapse() }
+                items?.forEach { it.collapse() }
                 currentlyExpandedMenu = null
 
             }
             if (event.action == MotionEvent.ACTION_MOVE) {
-                val p = checkSelectedItem(event.xCoord, event.yCoord)
+                val p = checkSelectedItem(event.xCoord, event.yCoord) ?: -1
                 if (p != selectedItemIndex) {
                     performHapticFeedback()
 
                     title.text = ""
-                    items.getOrNull(selectedItemIndex)?.setIsHighlighted(false)
+                    items?.getOrNull(selectedItemIndex)?.setIsHighlighted(false)
 
 
-                    items.getOrNull(p)?.apply {
+                    items?.getOrNull(p)?.apply {
                         title.text = menuItems?.get(p)?.title
                         setIsHighlighted(true)
                     }
@@ -158,7 +173,7 @@ class FloatingMenu : FrameLayout {
     fun onLongTapDetected() {
         val e = lastMotionEvent ?: return
         if (e.action == MotionEvent.ACTION_UP) return
-        if (items.isEmpty()) return
+        if (items.isNullOrEmpty()) return
 
         currentlyExpandedMenu = this
         isVisible = true
@@ -167,7 +182,7 @@ class FloatingMenu : FrameLayout {
         aX = e.xCoord
         aY = e.yCoord
         selectedItemIndex = -1
-        items.forEach {
+        items?.forEach {
             it.bg.layoutParams = (it.bg.layoutParams as? LayoutParams)?.apply {
                 leftMargin = aX - dip(menuItemSize / 2)
                 topMargin = aY - dip(menuItemSize / 2)
@@ -181,7 +196,7 @@ class FloatingMenu : FrameLayout {
 
         val topSide = context.screenHeight / 2 > aY
         val fromDegrees = sign * if (topSide) 0 else 90
-        val step = sign * (menuCorner) / items.size
+        val step = sign * (menuCorner) / items?.size!!
 
 
         title.layoutParams = LayoutParams(wrapContent, wrapContent).apply {
@@ -189,7 +204,7 @@ class FloatingMenu : FrameLayout {
                     (if (topSide) Gravity.BOTTOM else Gravity.TOP)
         }
 
-        items.forEachIndexed { index, item ->
+        items?.forEachIndexed { index, item ->
             val degree = (fromDegrees + step * index).toDouble()
             val d = Math.toRadians(degree)
             item.expand((radius * sin(d)).roundToInt(), (radius * cos(d)).roundToInt())
@@ -206,6 +221,7 @@ class FloatingMenu : FrameLayout {
 
         override fun createView(ui: AnkoContext<FloatingMenu>) = with(ui) {
             bg = frameLayout {
+                tag = MENU_ITEM_TAG
                 lparams(width = dip(menuItemSize), height = dip(menuItemSize))
                 padding = dip(innerPadding)
                 alpha = 0f
