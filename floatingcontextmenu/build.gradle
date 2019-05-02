@@ -19,7 +19,7 @@ ext {
     siteUrl = ''
     gitUrl = 'https://github.com/appdev-academy/floating-context-menu-android'
 
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.0.6'
 
     developerId = 'staspetrenko'
     developerName = 'Stas Petrenko'
@@ -45,8 +45,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.6"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

@@ -13,7 +13,7 @@
 ### gradle
 ```groovy
 dependencies {
-    implementation 'academy.appdev:floating-context-menu:1.0.4'
+    implementation 'academy.appdev:floating-context-menu:1.0.6'
 }
 ```
 
@@ -22,7 +22,7 @@ dependencies {
 <dependency>
 	<groupId>academy.appdev</groupId>
 	<artifactId>floating-context-menu</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.6</version>
 	<type>pom</type>
 </dependency>
 ```
@@ -39,8 +39,8 @@ menu = floatingMenu(ArrayList<FloatingMenu.MenuItem>().apply {
                 }) {
                     // configuration
                     menuItemSize = 70
-                    menuCorner = 130
-                    radius = 130
+                    menuAngleValue = 130
+                    menuRadius = 130
                     animationDuration = 250L
 
                 }.lparams {
@@ -63,8 +63,8 @@ Configure view in your presenter class :
  floating_menu.apply {
              // configuration
              menuItemSize = 70
-             menuCorner = 130
-             radius = 130
+             menuAngleValue = 130
+             menuRadius = 130
              animationDuration = 250L
          }
 ```
@@ -98,27 +98,33 @@ setOnItemLongClickListener { _, _, position, _ ->
 
 Floating menu has many public fields that can be modified
 
-```
-    // customization
-    var menuItemSize = 70
-    var menuCorner = 130
-    var radius = 130
-    var animationDuration = 250L
+`menuItemSize` - Menu item diameter in dp
 
-    var collapseScale = 0.3f
-    var defaultScale = 1f
-    var selectedScale = 1.13f
-    var innerPadding: Int = 10
+`menuAngleValue` - Menu item diameter in degrees (0..360)
 
-    var defaultIconTint = android.R.color.black
-    var selectedIconTint = android.R.color.white
+`menuRadius` - Distance between touch position and center of menu items in dp
 
-    var defaultBackgroundTint: Int = android.R.color.white
-    var selectedBackgroundTint: Int = android.R.color.black
+`animationDuration` - Expand/collapse animation duration
 
-    var frameBgColor = R.color.shadow
-    var textColor = android.R.color.white
-```
+`collapseScale` - Menu items scale in collapsed state. (1.0 - normal size) 
+
+`defaultScale` - Menu items scale in expanded state. (1.0 - normal size)
+
+`selectedScale` - Menu items scale while touched. (1.0 - normal size)
+
+`innerPadding` - Inner padding for icon in item in dp
+
+`defaultIconTintResource` - Menu item icon color resource in default state
+
+`selectedIconTintResource` - Menu item icon color resource in selected state
+
+`defaultBackgroundTintResource` - Menu item background color resource in default state
+
+`selectedBackgroundTintResource` - Menu item background color resource in selected state
+
+`frameBgColorResource` - Menu background frame color resource
+
+`textColorResource` - Menu item title text color resource
 
 # License
 
