@@ -16,7 +16,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.*
-import java.time.format.DecimalStyle
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -32,32 +31,101 @@ class FloatingMenu : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     // customization
+    /**
+     * Menu item diameter in dp
+     */
     var menuItemSize = 70
-    var menuCorner = 130
-    var radius = 130
+
+    /**
+     * Menu item diameter in degrees (0..360)
+     */
+    var menuAngleValue = 130
+
+    /**
+     * Distance between touch position and center of menu items in dp
+     */
+    var menuRadius = 130
+
+    /**
+     * Expand/collapse animation duration
+     */
     var animationDuration = 250L
 
+    /**
+     * Menu items scale in collapsed state.
+     * 0.5f = half size
+     * 1f - normal size
+     * 2f - doubled size
+     */
     var collapseScale = 0.3f
+
+    /**
+     * Menu items scale in expanded state.
+     * 0.5f = half size
+     * 1f - normal size
+     * 2f - doubled size
+     */
     var defaultScale = 1f
+
+
+    /**
+     * Menu items scale while touched.
+     * 0.5f = half size
+     * 1f - normal size
+     * 2f - doubled size
+     */
     var selectedScale = 1.13f
+
+    /**
+     * Inner padding for icon in item in dp
+     */
     var innerPadding: Int = 10
 
-    var defaultIconTint = android.R.color.black
-    var selectedIconTint = android.R.color.white
+    /**
+     * Menu item icon color resource in default state
+     */
+    var defaultIconTintResource = android.R.color.black
 
-    var defaultBackgroundTint: Int = android.R.color.white
-    var selectedBackgroundTint: Int = android.R.color.black
+    /**
+     * Menu item icon color resource in selected state
+     */
+    var selectedIconTintResource = android.R.color.white
 
-    var frameBgColor = R.color.shadow
-    var textColor = android.R.color.white
 
+    /**
+     * Menu item background color resource in default state
+     */
+    var defaultBackgroundTintResource: Int = android.R.color.white
 
+    /**
+     * Menu item background color resource in selected state
+     */
+    var selectedBackgroundTintResource: Int = android.R.color.black
+
+    /**
+     * Menu background frame color resource
+     */
+    var frameBgColorResource = R.color.shadow
+
+    /**
+     * Menu item title text color
+     */
+    var textColorResource = android.R.color.white
+
+    /**
+     * Menu items list.
+     * You can assign new list.
+     * Changes will be applied automatically.
+     */
     var menuItems: List<MenuItem>? = null
         set(value) {
             field = value
             createMenuItemViews()
         }
 
+    /**
+     * Call this method when you change `menuItems` without reassigning.
+     */
     fun notifyMenuItemsChanged() {
         createMenuItemViews()
     }
@@ -77,7 +145,7 @@ class FloatingMenu : FrameLayout {
             return false
         }
 
-        private val MENU_ITEM_TAG = "menu.item"
+        private const val MENU_ITEM_TAG = "menu.item"
     }
 
     private var aX: Int = 0
@@ -98,9 +166,9 @@ class FloatingMenu : FrameLayout {
         title = textView {
             textSize = 25f
             padding = dip(25)
-            textColorResource = this@FloatingMenu.textColor
+            textColorResource = this@FloatingMenu.textColorResource
         }
-        backgroundColorResource = frameBgColor
+        backgroundColorResource = frameBgColorResource
 
     }
 
@@ -196,7 +264,7 @@ class FloatingMenu : FrameLayout {
 
         val topSide = context.screenHeight / 2 > aY
         val fromDegrees = sign * if (topSide) 0 else 90
-        val step = sign * (menuCorner) / items?.size!!
+        val step = sign * (menuAngleValue) / items?.size!!
 
 
         title.layoutParams = LayoutParams(wrapContent, wrapContent).apply {
@@ -207,7 +275,7 @@ class FloatingMenu : FrameLayout {
         items?.forEachIndexed { index, item ->
             val degree = (fromDegrees + step * index).toDouble()
             val d = Math.toRadians(degree)
-            item.expand((radius * sin(d)).roundToInt(), (radius * cos(d)).roundToInt())
+            item.expand((menuRadius * sin(d)).roundToInt(), (menuRadius * cos(d)).roundToInt())
         }
     }
 
@@ -247,14 +315,14 @@ class FloatingMenu : FrameLayout {
                     fillAfter = true
                 }
                 startAnimation(scale)
-                setShape(if (b) selectedBackgroundTint else defaultBackgroundTint, dip(menuItemSize))
+                setShape(if (b) selectedBackgroundTintResource else defaultBackgroundTintResource, dip(menuItemSize))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     elevation = if (b) dip(10).toFloat() else dip(1).toFloat()
                 }
             }
 
             icon.setColorFilter(
-                ContextCompat.getColor(context, if (b) selectedIconTint else defaultIconTint),
+                ContextCompat.getColor(context, if (b) selectedIconTintResource else defaultIconTintResource),
                 PorterDuff.Mode.SRC_IN
             )
         }
